@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<MyFirstMvcApp.Models.Product>;    //link to the Product model 
+@{
+    ViewData["Title"] = "Product Page";
+}
+<h2>Welcome to the Product Page</h2>
+<p>This is a custom page from your own controller!</p>
+<h5>@ViewBag.Message</h5>
+<h6>@ViewBag.Message2</h6>
+<p><strong>Today’s Date & Time:</strong> @ViewBag.Date</p>
+
+<h1>Product Details List</h1>
+<hr/>
+<table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price (₹)</th>
+        <th>Description</th>
+    </tr>
+
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.Id</td>
+            <td>@p.Name</td>
+            <td>@p.Price</td>
+            <td>@p.Description</td>
+        </tr>
+    }
+</table>
