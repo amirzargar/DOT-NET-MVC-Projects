@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model MyFirstMvcApp.Models.Product
+
+<h2>Add New Product</h2>
+
+<form asp-action="Create" method="post">
+
+    <div>
+        <label>Product Name:</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name" style="color:red"></span>
+    </div>
+
+    <div>
+        <label>Price:</label>
+        <input asp-for="Price" />
+        <span asp-validation-for="Price" style="color:red"></span>
+    </div>
+
+    <div>
+        <label>Quantity:</label>
+        <input asp-for="Quantity" />
+        <span asp-validation-for="Quantity" style="color:red"></span>
+    </div>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />            
+}

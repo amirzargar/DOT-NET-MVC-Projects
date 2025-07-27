@@ -9,9 +9,9 @@ namespace MyFirstMvcApp.Controllers
         {
             ViewBag.Message = "This Text is Passed from Controller of Product(ControllerProduct.cs)!";
             ViewBag.Message2 = "Welcome Amir!";
-            ViewBag.Date = DateTime.Now.ToShortDateString()+"  "+DateTime.Now.ToShortTimeString();
+            ViewBag.Date = DateTime.Now.ToShortDateString() + "  " + DateTime.Now.ToShortTimeString();
 
-            // Create a sample product & setting that inside the models product.cs 
+            /* Create a sample product & setting that inside the models product.cs 
             var product = new List<Product>
             {
                 new Product
@@ -37,7 +37,29 @@ namespace MyFirstMvcApp.Controllers
                 }
 
             };
-            return View(product);   // ✅ Pass model to view
+            return View(product);   // ✅ Pass model to view*/
+
+            return View(); // ✅ Return the view without passing any model
+        }
+    
+
+    //[HttpGet] action to return the empty form
+    [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        //[HttpPost] action to handle form submission
+        [HttpPost]
+        public IActionResult Create(Product product)     // ✅ Use the Product model to receive form data
+        {
+            if (ModelState.IsValid)                      // Check if the model state is valid
+            {
+                ViewBag.Message = "Product Created Successfully!";
+                return View("Success", product);       // Redirect to a success view after successful creation
+            }
+            return View(product);                      // If the model state is invalid, return the same view with the product data
         }
     }
 }
