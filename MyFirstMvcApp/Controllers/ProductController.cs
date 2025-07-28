@@ -64,7 +64,9 @@ namespace MyFirstMvcApp.Controllers
                 TempData["Success"] = "Product created successfully!"; // Store a success message in TempData
                 return RedirectToAction("Success", product);            // Redirect to the Success action with the product data
             }
-            return View(product);                      // If the model state is invalid, return the same view with the product data
+            
+            return View(product); // If the model state is invalid, return the view with validation errors
+
         }
 
         public IActionResult Success(Product product)

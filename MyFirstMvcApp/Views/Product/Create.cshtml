@@ -8,23 +8,28 @@
 
 <form asp-action="Create" method="post">
 
-    <div>
-        <label>Product Name:</label>
-        <input asp-for="Name" />
-        <span asp-validation-for="Name" style="color:red"></span>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
     </div>
 
-    <div>
-        <label>Price:</label>
-        <input asp-for="Price" />
-        <span asp-validation-for="Price" style="color:red"></span>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Price)
+        @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
     </div>
 
-    <div>
-        <label>Quantity:</label>
-        <input asp-for="Quantity" />
-        <span asp-validation-for="Quantity" style="color:red"></span>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Quantity)
+        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
     </div>
+
+
 
     <button type="submit">Submit</button>
 
