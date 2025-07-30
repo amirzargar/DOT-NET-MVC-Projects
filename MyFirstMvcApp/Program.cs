@@ -1,4 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using MyFirstMvcApp.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Register AppDbContext and use InMemory database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseInMemoryDatabase("ProductDb"));                     // "ProductDb" is just a name
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

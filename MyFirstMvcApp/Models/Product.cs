@@ -7,7 +7,11 @@ namespace MyFirstMvcApp.Models
 
     public class Product
     {
-        
+
+        [Key] // Optional, but makes intent clear
+        public int Id { get; set; }  // ✅ Required for EF Core to work
+
+
         [Required(ErrorMessage ="Name is Required")]
         [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
         public string? Name { get; set; }

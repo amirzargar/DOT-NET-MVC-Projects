@@ -1,12 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyFirstMvcApp.Data; // ✅ Add this to use the Data namespace
 using MyFirstMvcApp.Models; // ✅ Add this to use the Product model
 
 namespace MyFirstMvcApp.Controllers
 {
     public class ProductController : Controller
     {
-        // ✅ This is a static list to hold products in memory for demonstration purposes
-        private static List<Product> _products = new List<Product>();
+        //removed this static list and used AppDbcontext instead
+        /* ✅ This is a static list to hold products in memory for demonstration purposes
+        private static List<Product> _products = new List<Product>();*/
+
+        private readonly AppDbContext _context; // ✅ Use dependency injection to access the database context
+
+        // ✅ Constructor injection of AppDbContext
+        public ProductController(AppDbContext context)
+        {
+            _context = context;
+        }
 
 
         public IActionResult Index()
@@ -15,37 +25,41 @@ namespace MyFirstMvcApp.Controllers
             ViewBag.Message2 = "Welcome Amir!";
             ViewBag.Date = DateTime.Now.ToShortDateString() + "  " + DateTime.Now.ToShortTimeString();
 
-                /* Create a sample product & setting that inside the models product.cs 
-                var product = new List<Product>
+            /* Create a sample product & setting that inside the models product.cs 
+            var product = new List<Product>
+            {
+                new Product
                 {
-                    new Product
-                    {
-                        Id = 1,
-                        Name = "Laptop",
-                        Price = 999.99,
-                        Description = "A high-performance laptop for all your computing needs."
-                    },
-                    new Product
-                    {
-                        Id = 2,
-                        Name = "Smartphone",
-                        Price = 499.99,
-                        Description = "A latest model smartphone with advanced features."
-                    },
-                    new Product
-                    {
-                        Id = 3,
-                        Name = "Headphones",
-                        Price = 199.99,
-                        Description = "Noise-cancelling headphones for an immersive audio experience."
-                    }
+                    Id = 1,
+                    Name = "Laptop",
+                    Price = 999.99,
+                    Description = "A high-performance laptop for all your computing needs."
+                },
+                new Product
+                {
+                    Id = 2,
+                    Name = "Smartphone",
+                    Price = 499.99,
+                    Description = "A latest model smartphone with advanced features."
+                },
+                new Product
+                {
+                    Id = 3,
+                    Name = "Headphones",
+                    Price = 199.99,
+                    Description = "Noise-cancelling headphones for an immersive audio experience."
+                }
 
-                };
-                return View(product);   // ✅ Pass model to view*/
+            };
+            return View(product);   // ✅ Pass model to view*/
 
-            return View(_products); 
+            var products = _context.Products.ToList(); // ✅ Get list of products from DB
+            return View(products); // ✅ Pass the correct model
+
+
         }
     
+
 
     //[HttpGet] action to return the empty form
     [HttpGet]
@@ -60,7 +74,8 @@ namespace MyFirstMvcApp.Controllers
         {
             if (ModelState.IsValid)                      // Check if the model state is valid
             {
-                _products.Add(product);                 // Add the product to the static list
+                _context.Add(product);                  // Add the product to the database context
+                _context.SaveChanges();                 // Save changes to the database
                 TempData["Success"] = "Product created successfully!"; // Store a success message in TempData
                 return RedirectToAction("Success", product);            // Redirect to the Success action with the product data
             }
