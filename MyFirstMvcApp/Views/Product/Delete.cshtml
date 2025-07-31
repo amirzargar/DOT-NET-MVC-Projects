@@ -1,0 +1,43 @@
+﻿@model MyFirstMvcApp.Models.Product
+
+@{
+    ViewData["Title"] = "Delete Product";
+
+}
+<h2>Delete Product</h2>
+
+<div>
+
+    <h4> Are you Sure You want to delete this product!</h4>
+    <hr />
+
+
+    <dl class="row">                                              
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)             
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+     </dl>
+
+    
+    <form asp-action="Delete" method="post" class="d-inline">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+
+</div>

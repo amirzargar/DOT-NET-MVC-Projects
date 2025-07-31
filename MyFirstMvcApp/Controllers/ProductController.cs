@@ -90,6 +90,70 @@ namespace MyFirstMvcApp.Controllers
             return View(product); // ✅ Return the view with the product data
         }
 
-        
+        //Get edit product
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var product = _context.Products.Find(id); // Find the product by ID
+            if (product == null)
+            {
+                return NotFound(); // Return 404 if product not found
+            }
+            return View(product); // Return the view with the product data
+        }
+
+        //post edit product
+
+        public IActionResult Edit(Product product)
+        {
+            if (ModelState.IsValid) // Check if the model state is valid
+            {
+                _context.Update(product); // Update the product in the database context
+                _context.SaveChanges(); // Save changes to the database
+                TempData["Message"] = "Product updated successfully!"; // Store a success message in TempData
+                return RedirectToAction("Index"); // Redirect to the Index action
+            }
+            return View(product); // If the model state is invalid, return the view with validation errors
+        }
+
+
+        //Get Delete product
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var product=_context.Products.FirstOrDefault(p => p.Id == id );   // Find the product by ID
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);     // Return the view with the product data
+
+        }
+
+
+        //post Delete product
+
+        [HttpPost, ActionName("Delete")]                  //Use ActionName to specify the action name for the POST method
+        [ValidateAntiForgeryToken]                        // Validate the anti-forgery token to prevent CSRF attacks
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                TempData["Message"] = "Product deleted successfully!";
+            }
+
+            return RedirectToAction(nameof(Index));               // Redirect to the Index action after deletion
+        }
+
+
+
+
+
     }
 }
+// ✅ This code defines a ProductController for managing products in an ASP.NET Core MVC application.

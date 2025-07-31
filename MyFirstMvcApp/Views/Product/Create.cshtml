@@ -1,14 +1,11 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-
+﻿
 @model MyFirstMvcApp.Models.Product
 
 <h2>Add New Product</h2>
 
-@Html.BeginForm("Create", "Product", FormMethod.Post, new { @class = "form-horizontal" })
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { @class = "form-horizontal" }))
 {
- @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
 
 
 <div class="form-group">
@@ -33,8 +30,7 @@
 
 <button type="submit" class="btn btn-primary">Submit</button>
 }
-   
-
+  
 
 
 <p>
