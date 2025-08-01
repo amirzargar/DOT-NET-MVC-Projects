@@ -4,9 +4,10 @@ using MyFirstMvcApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register AppDbContext and use InMemory database
+// Register AppDbContext and use sql server with a connection string.
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("ProductDb"));                     // "ProductDb" is just a name
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
