@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using MyFirstMvcApp.Data; // ✅ Add this to use the Data namespace
 using MyFirstMvcApp.Models; // ✅ Add this to use the Product model
+using X.PagedList; // ✅ Add this to use the PagedList extension for pagination
 
 namespace MyFirstMvcApp.Controllers
 {
@@ -19,19 +21,43 @@ namespace MyFirstMvcApp.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Index( string? searchTerm , string? sortOrder, int? page)
         {
             
-            var products = _context.Products.ToList(); // ✅ Get list of products from DB
-            return View(products); // ✅ Pass the correct model
+            var products = _context.Products.AsQueryable(); // ✅ Use the database context to get products as a queryable collection
+
+            if (!string.IsNullOrEmpty(searchTerm)) // Check if the search term is provided
+            {
+                products = products.Where(p => p.Name.Contains(searchTerm));
+                ViewBag.SearchTerm = searchTerm; // Filter products by name
+            }
+
+
+            //sort logic by name and price
+
+            ViewBag.NameSort= sortOrder == "name_asc"? "name_desc" : "name_asc"; // Toggle sort order for name
+            ViewBag.PriceSort = sortOrder == "price_asc" ? "price_desc" : "price_asc"; // Toggle sort order for price
+
+            products = sortOrder switch
+            {
+                "name_asc" => products.OrderBy(p => p.Name), // Sort by name ascending
+                "name_desc" => products.OrderByDescending(p => p.Name), // Sort by name descending
+                "price_asc" => products.OrderBy(p => p.Price), // Sort by price ascending
+                "price_desc" => products.OrderByDescending(p => p.Price), // Sort by price descending
+                _ => products // Default case, no sorting applied
+            };
+
+            int pageSize = 5;            // ✅ Set the number of products per page
+            int pageNumber = page ?? 1;  // ✅ Get the current page number, defaulting to 1 if not provided
+            return View(products.ToPageList(pageNumber, pageSize));  // ✅ Return the paginated list of products to the view
 
 
         }
-    
 
 
-    //[HttpGet] action to return the empty form
-    [HttpGet]
+
+        //[HttpGet] action to return the empty form
+        [HttpGet]
         public IActionResult Create()
         {
             return View();

@@ -1,4 +1,8 @@
-﻿@model List<MyFirstMvcApp.Models.Product>;    //link to the Product model 
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@model IPagedList<MyFirstMvcApp.Models.Product>
+
+
 <!-- This is the Index view for the Product controller -->
 
 @{
@@ -31,6 +35,25 @@
 }
 else
 {
+  
+        <form asp-controller="Product" asp-action="Index" method="get">
+            <input type="text" name="searchTerm" value="@ViewBag.SearchTerm" placeholder="Search by name" />
+            <button type="submit">Search</button>
+        </form>
+
+      
+      
+    <p>Search Term: @ViewBag.SearchTerm</p>
+   
+    <p>
+        <!-- Sorting Links -->
+        Sort by:
+        <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">Name</a> |
+        <a asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSort">Price</a>
+    </p>
+
+
+    
     <table class="table table-striped">
         <thead>
             <tr>
@@ -57,4 +80,14 @@ else
             }
         </tbody>
     </table>
+
+    <div>
+        @Html.PagedListPager(Model, page => Url.Action("Index", new {
+        page,
+        searchTerm = ViewBag.SearchTerm,
+        sortOrder = ViewBag.SortOrder
+        }))
+
+</div>
+
 }
