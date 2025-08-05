@@ -4,6 +4,7 @@ using MyFirstMvcApp.Data; // ✅ Add this to use the Data namespace
 using MyFirstMvcApp.Models; // ✅ Add this to use the Product model
 using X.PagedList; // ✅ Add this to use the PagedList extension for pagination
 
+
 namespace MyFirstMvcApp.Controllers
 {
     public class ProductController : Controller
@@ -49,7 +50,7 @@ namespace MyFirstMvcApp.Controllers
 
             int pageSize = 5;            // ✅ Set the number of products per page
             int pageNumber = page ?? 1;  // ✅ Get the current page number, defaulting to 1 if not provided
-            return View(products.ToPageList(pageNumber, pageSize));  // ✅ Return the paginated list of products to the view
+            return View(products.ToPagedList(pageNumber, pageSize));  // ✅ Return the paginated list of products to the view
 
 
         }
