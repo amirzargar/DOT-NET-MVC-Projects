@@ -7,6 +7,14 @@
     <p><strong>Name:</strong> @Model.Name</p>
     <p><strong>Price:</strong> @Model.Price</p>
     <p><strong>Quantity:</strong> @Model.Quantity</p>
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <p><img src="@Model.ImageUrl" width="150" /></p>
+    }
+    else
+    {
+        <p>No image uploaded.</p>
+    }
     <p>
         <a href="/Product/Create">← Back to Add Product</a>
     </p>

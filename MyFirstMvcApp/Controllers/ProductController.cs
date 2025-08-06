@@ -18,7 +18,7 @@ namespace MyFirstMvcApp.Controllers
         // ✅ Constructor injection of AppDbContext
         public ProductController(AppDbContext context)
         {
-            _context = context;
+            _context = context;   // Assign the injected context to the private field
         }
 
 
@@ -66,16 +66,45 @@ namespace MyFirstMvcApp.Controllers
 
         //[HttpPost] action to handle form submission
         [HttpPost]
-        public IActionResult Create(Product product)     // ✅ Use the Product model to receive form data
+        public async Task<IActionResult> Create(Product product)    // ✅ Use the Product model to receive form data
         {
             if (ModelState.IsValid)                      // Check if the model state is valid
             {
+                // 1. Handle image upload
+                if (product.ImageFile != null)
+                {
+                    // Get the wwwroot/images folder
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                    // Create the folder if it doesn't exist
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Make unique file name
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + product.ImageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await product.ImageFile.CopyToAsync(stream);
+                    }
+
+                    // Save path to DB (relative)
+                    product.ImageUrl = "/images/" + uniqueFileName;
+                }
+
+                // 2. Save product to DB
+
                 _context.Products.Add(product);                  // Add the product to the database context
-                _context.SaveChanges();                 // Save changes to the database
-                TempData["Success"] = "Product created successfully!"; // Store a success message in TempData
-                return RedirectToAction("Success", product);            // Redirect to the Success action with the product data
+               
+                await _context.SaveChangesAsync();               // Save changes to the database asynchronously
+
+                TempData["Success"] = "Product created successfully with image!";
+                return RedirectToAction("Success", product);
             }
-            
+
             return View(product); // If the model state is invalid, return the view with validation errors
 
         }

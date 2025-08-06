@@ -3,7 +3,7 @@
 
 <h2>Add New Product</h2>
 
-@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
 
@@ -26,6 +26,13 @@
     @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "text-danger" })
 </div>
 
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImageFile, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="file" name="ImageFile" class="form-control" />
+            @Html.ValidationMessageFor(model => model.ImageFile, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
 
 <button type="submit" class="btn btn-primary">Submit</button>
